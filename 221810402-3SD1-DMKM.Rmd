@@ -1,0 +1,50 @@
+---
+title: "221810402-3SD1-DMKM"
+author: "M.Tharif Arkandana"
+date: "10/27/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#input library dan data
+library(randomForest)
+library(caret)
+library(psych)
+setwd("C:\\Users\\arkandana\\Documents\\PJJ SEMESTER 5\\DATA MINING\\UTS\\UTS")
+data <- read.csv("seeds.csv",sep=";")
+str(data)
+head(data)
+View(data)
+```
+### Konversi Data
+Ubah tipe variabel menjadi tipe faktor
+```{r}
+as.factor(data)
+str(data)
+```
+
+```{r}
+#membagi sampel menjadi 80% data training dan 20 % data testing
+sampel = sample(1:nrow(data),0.8*nrow(data),replace=TRUE)
+training = data.frame(data)[sampel,]
+testing = data.frame(data)[-sampel,]
+```
+
+```{r}
+#membuat model
+model = randomForest(varieties~.,data = training)
+model
+```
+
+```{r}
+#melakukan prediksi terhadap model
+prediksi = predict(model,testing)
+hasil = confusionMatrix(table(prediksi,testing$varieties))
+hasil
+```
+
+
